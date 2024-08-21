@@ -15,7 +15,7 @@ class CustomIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return Icon(
       iconType,
-      color: colorIcon ?? Theme.of(context).colorScheme.tertiary,
+      color: colorIcon ?? Theme.of(context).colorScheme.secondary,
       size: sizeIcon,
     );
   }

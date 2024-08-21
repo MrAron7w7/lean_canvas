@@ -6,6 +6,7 @@ class LeanView extends StatefulWidget {
   final Map<String, String> initialData;
 
   const LeanView({super.key, this.initialData = const {}});
+  static const name = 'lean_view';
 
   @override
   _LeanViewState createState() => _LeanViewState();
@@ -13,55 +14,68 @@ class LeanView extends StatefulWidget {
 
 class _LeanViewState extends State<LeanView> {
   final _formKey = GlobalKey<FormState>();
+  late TextEditingController _propuestaValorController;
+  late TextEditingController _segmentoClientesController;
+  late TextEditingController _problemaController;
+  late TextEditingController _solucionController;
+  late TextEditingController _canalesController;
+  late TextEditingController _flujosIngresoController;
+  late TextEditingController _estructuraCostesController;
+  late TextEditingController _metricasClaveController;
+  late TextEditingController _ventajaDiferencialController;
 
-  // Creo una variable en la cual sera un mapeo de tipo string y textfieldEditinController
-  final Map<String, TextEditingController> _controllers = {};
-
-  // Me creo la lista en la cual estaran los nombres de los textfield
-  final List<String> _fields = [
-    'Propuesta Única de Valor',
-    'Segmento de Clientes',
-    'Problema',
-    'Solución',
-    'Canales',
-    'Flujos de Ingreso',
-    'Estructura de Costes',
-    'Métricas Clave',
-    'Ventaja Diferencial',
-  ];
-
-  // Al iniciar el widget junto los espaciados de los textos para que estean juntos
-  // ademas los pongo en minusculas
   @override
   void initState() {
     super.initState();
-    for (var field in _fields) {
-      _controllers[field] = TextEditingController(
-        text: widget.initialData[field.toLowerCase().replaceAll(' ', '')] ?? '',
-      );
-    }
+    _propuestaValorController =
+        TextEditingController(text: widget.initialData['propuestaValor'] ?? '');
+    _segmentoClientesController = TextEditingController(
+        text: widget.initialData['segmentoClientes'] ?? '');
+    _problemaController =
+        TextEditingController(text: widget.initialData['problema'] ?? '');
+    _solucionController =
+        TextEditingController(text: widget.initialData['solucion'] ?? '');
+    _canalesController =
+        TextEditingController(text: widget.initialData['canales'] ?? '');
+    _flujosIngresoController =
+        TextEditingController(text: widget.initialData['flujosIngreso'] ?? '');
+    _estructuraCostesController = TextEditingController(
+        text: widget.initialData['estructuraCostes'] ?? '');
+    _metricasClaveController =
+        TextEditingController(text: widget.initialData['metricasClave'] ?? '');
+    _ventajaDiferencialController = TextEditingController(
+        text: widget.initialData['ventajaDiferencial'] ?? '');
   }
 
-  // Se ha creado un metodo en la cual valida si se cumple la validacion puesta
-  //
   void _saveForm() {
     if (_formKey.currentState!.validate()) {
       final leanCanvasData = {
-        for (var field in _fields)
-          field.toLowerCase().replaceAll(' ', ''): _controllers[field]!.text,
+        'propuestaValor': _propuestaValorController.text,
+        'segmentoClientes': _segmentoClientesController.text,
+        'problema': _problemaController.text,
+        'solucion': _solucionController.text,
+        'canales': _canalesController.text,
+        'flujosIngreso': _flujosIngresoController.text,
+        'estructuraCostes': _estructuraCostesController.text,
+        'metricasClave': _metricasClaveController.text,
+        'ventajaDiferencial': _ventajaDiferencialController.text,
       };
 
       Navigator.pop(context, leanCanvasData);
     }
   }
 
-  // Se llama el metodo dispone cuando el widget ya no se consume (Se elinina los datos
-  // de los textfield)
   @override
   void dispose() {
-    for (var controller in _controllers.values) {
-      controller.dispose();
-    }
+    _propuestaValorController.dispose();
+    _segmentoClientesController.dispose();
+    _problemaController.dispose();
+    _solucionController.dispose();
+    _canalesController.dispose();
+    _flujosIngresoController.dispose();
+    _estructuraCostesController.dispose();
+    _metricasClaveController.dispose();
+    _ventajaDiferencialController.dispose();
     super.dispose();
   }
 
@@ -72,21 +86,153 @@ class _LeanViewState extends State<LeanView> {
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: const CustomLabel(text: 'Pilares Lean Canvas'),
+          title: const CustomLabel(
+            text: 'Pilares Lean Canvas',
+          ),
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Form(
-            key: _formKey,
-            child: ListView.builder(
-              itemCount: _fields.length,
-              itemBuilder: (context, index) {
-                final field = _fields[index];
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 10.0),
-                  child: _buildTextField(label: field),
-                );
-              },
+          child: SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  const CustomLabel(
+                    text: 'Propuesta Única de Valor',
+                    fontSize: 16,
+                  ),
+                  //
+                  spacingGap(10),
+                  //
+                  CustomTextformfiel(
+                    maxLines: 2,
+                    controller: _propuestaValorController,
+                    keyboardType: TextInputType.multiline,
+                  ),
+                  //
+                  spacingGap(10),
+                  //
+                  const CustomLabel(
+                    text: 'Segmento de Clientes',
+                    fontSize: 16,
+                  ),
+                  //
+                  spacingGap(10),
+                  //
+                  CustomTextformfiel(
+                    controller: _segmentoClientesController,
+                    maxLines: 2,
+                    keyboardType: TextInputType.multiline,
+                  ),
+                  //
+                  spacingGap(10),
+                  //
+                  const CustomLabel(
+                    text: 'Problema',
+                    fontSize: 16,
+                  ),
+                  //
+                  spacingGap(10),
+                  //
+                  CustomTextformfiel(
+                    controller: _problemaController,
+                    maxLines: 2,
+                    keyboardType: TextInputType.multiline,
+                  ),
+                  //
+                  spacingGap(10),
+                  //
+                  const CustomLabel(
+                    text: 'Solución',
+                    fontSize: 16,
+                  ),
+                  //
+                  spacingGap(10),
+                  //
+                  CustomTextformfiel(
+                    controller: _solucionController,
+                    maxLines: 2,
+                    keyboardType: TextInputType.multiline,
+                  ),
+                  //
+                  spacingGap(10),
+                  //
+                  const CustomLabel(
+                    text: 'Canales',
+                    fontSize: 16,
+                  ),
+                  //
+                  spacingGap(10),
+                  //
+                  CustomTextformfiel(
+                    controller: _canalesController,
+                    maxLines: 2,
+                    keyboardType: TextInputType.multiline,
+                  ),
+                  //
+                  spacingGap(10),
+                  //
+                  const CustomLabel(
+                    text: 'Flujos de Ingreso',
+                    fontSize: 16,
+                  ),
+                  //
+                  spacingGap(10),
+                  //
+                  CustomTextformfiel(
+                    controller: _flujosIngresoController,
+                    maxLines: 2,
+                    keyboardType: TextInputType.multiline,
+                  ),
+                  //
+                  spacingGap(10),
+                  //
+                  const CustomLabel(
+                    text: 'Estructura de Costes',
+                    fontSize: 16,
+                  ),
+                  //
+                  spacingGap(10),
+                  //
+                  CustomTextformfiel(
+                    controller: _estructuraCostesController,
+                    maxLines: 2,
+                    keyboardType: TextInputType.multiline,
+                  ),
+                  //
+                  spacingGap(10),
+                  //
+                  const CustomLabel(
+                    text: 'Métricas Clave',
+                    fontSize: 16,
+                  ),
+                  //
+                  spacingGap(10),
+                  //
+                  CustomTextformfiel(
+                    controller: _metricasClaveController,
+                    maxLines: 2,
+                    keyboardType: TextInputType.multiline,
+                  ),
+                  //
+                  spacingGap(10),
+                  //
+                  const CustomLabel(
+                    text: 'Ventaja Diferencial',
+                    fontSize: 16,
+                  ),
+                  //
+                  spacingGap(10),
+                  //
+                  CustomTextformfiel(
+                    controller: _ventajaDiferencialController,
+                    maxLines: 2,
+                    keyboardType: TextInputType.multiline,
+                  ),
+                  const SizedBox(height: 20),
+                ],
+              ),
             ),
           ),
         ),
@@ -103,24 +249,6 @@ class _LeanViewState extends State<LeanView> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildTextField({required String label}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        CustomLabel(
-          text: label,
-          fontSize: 16,
-        ),
-        spacingGap(10),
-        CustomTextformfiel(
-          controller: _controllers[label]!,
-          maxLines: 2,
-          keyboardType: TextInputType.multiline,
-        ),
-      ],
     );
   }
 }

@@ -6,12 +6,11 @@ part of 'theme_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$themeNotifierHash() => r'026ee6d5a559291c07e683fe6c460e2de520d258';
+String _$themeNotifierHash() => r'4c22a90c755de4e62b228822afdceca6ec35085a';
 
 /// See also [ThemeNotifier].
 @ProviderFor(ThemeNotifier)
-final themeNotifierProvider =
-    AutoDisposeNotifierProvider<ThemeNotifier, bool>.internal(
+final themeNotifierProvider = NotifierProvider<ThemeNotifier, bool>.internal(
   ThemeNotifier.new,
   name: r'themeNotifierProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -21,6 +20,6 @@ final themeNotifierProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$ThemeNotifier = AutoDisposeNotifier<bool>;
+typedef _$ThemeNotifier = Notifier<bool>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

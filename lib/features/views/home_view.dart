@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lean_canvas_project/features/models/canvas_data.dart';
+import 'package:lean_canvas_project/features/models/guide_lean_canvas.dart';
+import 'package:lean_canvas_project/features/providers/description_canvas_provider.dart';
 import 'package:lean_canvas_project/features/providers/theme_notifier.dart';
 import 'package:uicons/uicons.dart';
 
@@ -20,45 +21,60 @@ class HomeView extends ConsumerStatefulWidget {
 class _HomeViewState extends ConsumerState<HomeView> {
   @override
   Widget build(BuildContext context) {
+    final guideLeanCanvas = GuideLeanCanvas.getGuideLeanCanvas;
+    final descriptionData = ref.watch(descriptionStateProvider);
     return Scaffold(
       appBar: AppBar(
-        title: const CustomLabel(text: 'B I E N V E N I D O'),
+        centerTitle: true,
+        title: const CustomLabel(
+          text: 'B I E N V E N I D O',
+        ),
       ),
       drawer: _buidlDrawer(context),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                const SizedBox(height: 2.0),
-
-                spacingGap(30),
-
-                // Cards
-                GridView.builder(
-                  itemCount: CanvasData.canvasData.length,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 10.0,
-                    mainAxisSpacing: 10.0,
-                  ),
-                  itemBuilder: (context, index) {
-                    final canvas = CanvasData.canvasData[index];
-                    return CustomCard(
-                      image: canvas.image,
-                      text: canvas.title,
-                      color: Theme.of(context).colorScheme.primary,
-                      fontWeight: FontWeight.w600,
-                      onTap: () {},
-                    );
-                  },
-                ),
-              ],
+      body: Container(
+        padding: const EdgeInsets.all(20),
+        width: MediaQuery.of(context).size.width,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const CustomLabel(
+              text: 'Guia paso a paso',
+              fontSize: 20,
             ),
-          ),
+            spacingGap(20),
+            Expanded(
+              child: GridView.builder(
+                itemCount: guideLeanCanvas.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                ),
+                itemBuilder: (context, index) {
+                  final guideLean = guideLeanCanvas[index];
+                  return CustomCard(
+                    onTap: () {
+                      ref.read(descriptionStateProvider.notifier).update(
+                            (state) => DescriptionCanvasViewData(
+                              namePilar: guideLean.name,
+                              description: guideLean.description,
+                              tips: guideLean.tips,
+                              imagePilar: guideLean.imagePilar,
+                            ),
+                          );
+
+                      context.push(
+                        '/${DescriptionCanvasView.name}',
+                      );
+                    },
+                    image: '${guideLean.imagen}',
+                    text: '${guideLean.name}',
+                    fontSize: 12,
+                    textAlign: TextAlign.center,
+                    fontWeight: FontWeight.w500,
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -81,16 +97,25 @@ class _HomeViewState extends ConsumerState<HomeView> {
             CustomListTile(
               onTap: () => context.pop(),
               title: 'Inicio',
-              leading: Icon(UIcons.solidRounded.home),
+              fontWeight: FontWeight.w600,
+              leading: const CustomIcon(
+                iconType: Icons.home,
+                sizeIcon: 25,
+              ),
             ),
             CustomListTile(
               onTap: () => context.push('/${CreateView.name}'),
               title: 'Crear',
-              leading: Icon(UIcons.solidRounded.credit_card),
+              fontWeight: FontWeight.w600,
+              leading: const CustomIcon(
+                sizeIcon: 25,
+                iconType: Icons.edit_square,
+              ),
             ),
             const Spacer(),
             CustomSwitchListTitle(
               text: 'Modo oscuro',
+              fontWeight: FontWeight.w600,
               value: isDarkMode,
               onChanged: (value) =>
                   ref.read(themeNotifierProvider.notifier).toggleTheme(),

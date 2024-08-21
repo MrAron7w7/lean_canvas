@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:lean_canvas_project/core/utils/utils.dart';
 import 'package:lean_canvas_project/shared/components/components.dart';
 
 import 'lean_view.dart';
@@ -7,6 +9,8 @@ class EditView extends StatefulWidget {
   final Map<String, String> item;
 
   const EditView({super.key, required this.item});
+
+  static const name = 'edit_view';
 
   @override
   _EditViewState createState() => _EditViewState();
@@ -32,14 +36,8 @@ class _EditViewState extends State<EditView> {
 
   void _goToLeanCanvasForm() async {
     if (_formKey.currentState!.validate()) {
-      final leanCanvasData = await Navigator.push<Map<String, String>>(
-        context,
-        MaterialPageRoute(
-          builder: (context) => LeanView(
-            initialData: widget.item,
-          ),
-        ),
-      );
+      final leanCanvasData =
+          await context.push<Map<String, String>>('/${LeanView.name}');
 
       if (leanCanvasData != null) {
         final updatedItem = {
@@ -50,12 +48,13 @@ class _EditViewState extends State<EditView> {
           ...leanCanvasData,
         };
 
+        //context.pop(updatedItem);
         Navigator.pop(context, updatedItem);
 
-        _nombreProyectoController.clear();
-        _empresaController.clear();
-        _descripcionController.clear();
-        _notaController.clear();
+        // _nombreProyectoController.clear();
+        // _empresaController.clear();
+        // _descripcionController.clear();
+        // _notaController.clear();
       }
     }
   }
@@ -71,88 +70,96 @@ class _EditViewState extends State<EditView> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final textColor = theme.textTheme.bodyLarge?.color;
-    final inputDecoration = InputDecoration(
-      labelStyle: TextStyle(color: textColor),
-      counterStyle: TextStyle(color: textColor),
-      enabledBorder: UnderlineInputBorder(
-        borderSide: BorderSide(color: textColor ?? Colors.black),
-      ),
-      focusedBorder: UnderlineInputBorder(
-        borderSide: BorderSide(color: textColor ?? Colors.black),
-      ),
-    );
-
-    return Scaffold(
-      appBar: AppBar(
-        title: const CustomLabel(
-          text: 'Editar Proyecto',
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: const CustomLabel(
+            text: 'Editar Proyecto',
+          ),
         ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                TextFormField(
-                  controller: _nombreProyectoController,
-                  decoration: inputDecoration.copyWith(
-                    labelText: 'Nombre del Proyecto',
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  const CustomLabel(
+                    text: 'Nombre del Proyecto',
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
                   ),
-                  maxLength: 28,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor ingresa el nombre del proyecto';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 10),
-                TextFormField(
-                  controller: _empresaController,
-                  decoration: inputDecoration.copyWith(
-                    labelText: 'Empresa',
+                  spacingGap(15),
+                  CustomTextformfiel(
+                    controller: _nombreProyectoController,
+                    keyboardType: TextInputType.multiline,
+                    maxLines: 2,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Por favor ingresa el nombre del proyecto';
+                      }
+                      return null;
+                    },
                   ),
-                  maxLength: 28,
-                ),
-                const SizedBox(height: 10),
-                TextFormField(
-                  controller: _descripcionController,
-                  decoration: inputDecoration.copyWith(
-                    labelText: 'Descripción',
+                  spacingGap(15),
+                  _buildEditSection(
+                    text: 'Empresa',
+                    controller: _empresaController,
                   ),
-                  maxLength: 100,
-                ),
-                const SizedBox(height: 10),
-                TextFormField(
-                  controller: _notaController,
-                  decoration: inputDecoration.copyWith(
-                    labelText: 'Nota',
+                  spacingGap(15),
+                  const SizedBox(height: 10),
+                  _buildEditSection(
+                    text: 'Descripción',
+                    controller: _descripcionController,
                   ),
-                  maxLength: 100,
-                ),
-                const SizedBox(height: 20),
-              ],
+                  spacingGap(15),
+                  _buildEditSection(
+                    text: 'Nota',
+                    controller: _notaController,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(40),
+        floatingActionButton: FloatingActionButton(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(40),
+          ),
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          onPressed: _goToLeanCanvasForm,
+          child: const Icon(
+            Icons.check,
+            color: Colors.white,
+            size: 30,
+          ),
         ),
-        backgroundColor: const Color(0xFF1B264F),
-        onPressed: _goToLeanCanvasForm,
-        child: const Icon(
-          Icons.check,
-          color: Colors.white,
-          size: 30,
-        ),
       ),
+    );
+  }
+
+  Widget _buildEditSection({
+    required String text,
+    required TextEditingController controller,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        CustomLabel(
+          text: text,
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
+        ),
+        spacingGap(10),
+        CustomTextformfiel(
+          controller: controller,
+          keyboardType: TextInputType.multiline,
+          maxLines: 2,
+        ),
+      ],
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '/core/utils/utils.dart';
 import '/features/models/presentation.dart';
@@ -17,14 +18,65 @@ class PresentationView extends ConsumerStatefulWidget {
 }
 
 class _PresentationViewState extends ConsumerState<PresentationView> {
+  late PageController _pageController;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _pageController = PageController();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => _checkFirstView());
+  }
+
+  // Verificar si se ha visto por primera vez y si no pasa directo al home
+  Future<void> _checkFirstView() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool seen = prefs.getBool('seen') ?? false;
+    if (seen) {
+      // Navega a HomeView si ya se ha visto la presentación
+      context.go('/${HomeView.name}');
+    } else {
+      // Marca como visto si es la primera vez
+      await prefs.setBool('seen', true);
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  void _onItemTapped(int index) {
+    if (index < Presentation.getPresentations().length - 1) {
+      _pageController.nextPage(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    } else {
+      context.go('/${HomeView.name}');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final presentations = Presentation.getPresentations();
+    if (_isLoading) {
+      // Mostrar una pantalla de carga mientras se realiza la verificación
+      return Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        body: const Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
         child: PageView.builder(
-          itemCount: Presentation.getPresentations().length,
+          controller: _pageController,
+          itemCount: presentations.length,
           itemBuilder: (context, index) {
-            final presentation = Presentation.getPresentations()[index];
+            final presentation = presentations[index];
             return Container(
               margin: const EdgeInsets.all(16),
               child: Column(
@@ -53,7 +105,12 @@ class _PresentationViewState extends ConsumerState<PresentationView> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       TextButton(
-                        onPressed: () => context.go('/${HomeView.name}'),
+                        onPressed: () async {
+                          SharedPreferences prefs =
+                              await SharedPreferences.getInstance();
+                          await prefs.setBool('seen', true);
+                          context.go('/${HomeView.name}');
+                        },
                         style: TextButton.styleFrom(
                           foregroundColor:
                               Theme.of(context).colorScheme.tertiary,
@@ -65,9 +122,12 @@ class _PresentationViewState extends ConsumerState<PresentationView> {
                         ),
                       ),
                       CustomElevatedButton(
-                        onPressed: () {},
+                        onPressed: () => _onItemTapped(index),
                         sizeText: 15,
-                        text: 'Siguiente',
+                        text:
+                            index == Presentation.getPresentations().length - 1
+                                ? 'Comenzar'
+                                : 'Siguiente',
                         sizeWidth: 30,
                         sizeHeight: 50,
                         color: Theme.of(context).colorScheme.surface,

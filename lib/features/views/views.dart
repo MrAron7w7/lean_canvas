@@ -1,6 +1,9 @@
 export './add_view.dart';
 export './create_view.dart';
 export './detail_view.dart';
+export './edit_view.dart';
 export './home_view.dart';
 export './lean_view.dart';
+export './pdf_preview_view.dart';
 export './presentation_view.dart';
+export 'description_canvas_view.dart';

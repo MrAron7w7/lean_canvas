@@ -5,6 +5,7 @@ import 'package:lean_canvas_project/shared/components/components.dart';
 
 class AddView extends StatefulWidget {
   const AddView({super.key});
+  static const name = 'add_view';
 
   @override
   _AddViewState createState() => _AddViewState();

@@ -9,6 +9,7 @@ class CustomCard extends StatelessWidget {
   final Color? color;
   final FontWeight? fontWeight;
   final double? fontSize;
+  final TextAlign? textAlign;
 
   const CustomCard({
     super.key,
@@ -18,6 +19,7 @@ class CustomCard extends StatelessWidget {
     this.color,
     this.fontWeight,
     this.fontSize,
+    this.textAlign,
   });
 
   @override
@@ -25,7 +27,12 @@ class CustomCard extends StatelessWidget {
     return Card(
       elevation: 20,
       color: Theme.of(context).colorScheme.surface,
-      shadowColor: Colors.lightBlueAccent,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+        side: BorderSide(
+          color: Theme.of(context).colorScheme.secondary,
+        ),
+      ),
       child: InkWell(
         borderRadius: BorderRadius.circular(10),
         splashColor: Colors.lightBlueAccent,
@@ -36,16 +43,18 @@ class CustomCard extends StatelessWidget {
             spacingGap(20),
             CircleAvatar(
               radius: 40,
+              backgroundColor: Theme.of(context).colorScheme.surface,
               backgroundImage: AssetImage(image),
             ),
             spacingGap(10),
             CustomLabel(
+              textAlign: textAlign,
               text: text,
               color: color,
               fontSize: fontSize,
               fontWeight: fontWeight,
             ),
-            spacingGap(20),
+            spacingGap(5),
           ],
         ),
       ),

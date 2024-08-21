@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '/core/constants/app_assets.dart';
@@ -75,7 +76,10 @@ class _CreateViewState extends ConsumerState<CreateView> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const CustomLabel(text: 'Lean Canvas'),
+        title: const CustomLabel(
+          text: 'Lean Canvas',
+          fontWeight: FontWeight.w500,
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -148,15 +152,10 @@ class _CreateViewState extends ConsumerState<CreateView> {
                             fontWeight: FontWeight.bold,
                           ),
                           onTap: () async {
+                            final jsonString = jsonEncode(items[index]);
                             final result =
-                                await Navigator.push<Map<String, String>>(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => DetailView(
-                                  item: items[index],
-                                  index: index,
-                                ),
-                              ),
+                                await context.push<Map<String, String>>(
+                              '/${DetailView.name}/$jsonString/$index',
                             );
                             if (result != null) {
                               if (result.containsKey('delete') &&
@@ -183,12 +182,8 @@ class _CreateViewState extends ConsumerState<CreateView> {
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
         onPressed: () async {
-          final result = await Navigator.push<Map<String, String>>(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const AddView(),
-            ),
-          );
+          final result =
+              await context.push<Map<String, String>>('/${AddView.name}');
 
           if (result != null) {
             _addItem(result);

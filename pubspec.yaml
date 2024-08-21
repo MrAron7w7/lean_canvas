@@ -44,6 +44,12 @@ dependencies:
   shared_preferences: ^2.3.2
   flutter_riverpod: ^2.5.1
   riverpod_annotation: ^2.3.5
+  pdf: ^3.11.1
+  external_path: ^1.0.1
+  android_intent_plus: ^2.0.4
+  permission_handler: ^10.2.0
+  flutter_pdfview: ^1.0.1
+  get_storage: ^2.1.1
 
 dev_dependencies:
   flutter_test:
@@ -77,6 +83,17 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/
+    - assets/nueve_pilares/
+    - assets/nueve_pilares/pilares/
+    - assets/nueve_pilares/pilares/problema_pilar.jpg
+    - assets/nueve_pilares/pilares/segmento_cliente_pilar.jpg
+    - assets/nueve_pilares/pilares/valor_unica_pilar.jpg
+    - assets/nueve_pilares/pilares/solucion_pilar.jpg
+    - assets/nueve_pilares/pilares/canales_pilar.jpg
+    - assets/nueve_pilares/pilares/flujo_ingreso_pilar.jpg
+    - assets/nueve_pilares/pilares/estructura_coste_pilar.jpg
+    - assets/nueve_pilares/pilares/metricas_clave_pilar.jpg
+    - assets/nueve_pilares/pilares/ventajas_especiales.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

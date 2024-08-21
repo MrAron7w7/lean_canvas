@@ -53,7 +53,7 @@ class CustomTextformfiel extends StatelessWidget {
         ),
         prefixIcon: icon,
         filled: true,
-        fillColor: Colors.grey.shade200,
+        fillColor: Theme.of(context).colorScheme.surface,
         contentPadding: const EdgeInsets.symmetric(
           vertical: 16.0,
           horizontal: 20.0,
