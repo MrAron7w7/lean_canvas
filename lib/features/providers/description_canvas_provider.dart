@@ -1,25 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lean_canvas_project/features/models/guide_lean_canvas.dart';
 
-final descriptionStateProvider =
-    StateProvider<DescriptionCanvasViewData>((ref) {
-  return DescriptionCanvasViewData(
-    namePilar: '',
+final descriptionStateProvider = StateProvider<GuideLeanCanvas>((ref) {
+  return GuideLeanCanvas(
+    name: '',
     description: '',
     tips: '',
     imagePilar: '',
   );
 });
-
-class DescriptionCanvasViewData {
-  final String? namePilar;
-  final String? description;
-  final String? tips;
-  final String? imagePilar;
-
-  DescriptionCanvasViewData({
-    this.namePilar,
-    this.description,
-    this.tips,
-    this.imagePilar,
-  });
-}

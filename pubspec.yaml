@@ -50,6 +50,7 @@ dependencies:
   permission_handler: ^10.2.0
   flutter_pdfview: ^1.0.1
   get_storage: ^2.1.1
+  flutter_launcher_icons: ^0.13.1
 
 dev_dependencies:
   flutter_test:
@@ -66,6 +67,12 @@ dev_dependencies:
   custom_lint: ^0.6.4
   riverpod_lint: ^2.3.10
 
+
+# Launcher del icono de la aplicacion
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/icon.jpeg"
 
 
 
@@ -94,6 +101,7 @@ flutter:
     - assets/nueve_pilares/pilares/estructura_coste_pilar.jpg
     - assets/nueve_pilares/pilares/metricas_clave_pilar.jpg
     - assets/nueve_pilares/pilares/ventajas_especiales.jpg
+    - assets/icon/icon.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

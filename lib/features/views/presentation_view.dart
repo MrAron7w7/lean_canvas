@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lean_canvas_project/features/data/datas.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '/core/utils/utils.dart';
-import '/features/models/presentation.dart';
 import '/features/views/views.dart';
 import '/shared/components/components.dart';
 
@@ -47,7 +47,7 @@ class _PresentationViewState extends ConsumerState<PresentationView> {
   }
 
   void _onItemTapped(int index) {
-    if (index < Presentation.getPresentations().length - 1) {
+    if (index < getPresentations.length - 1) {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
@@ -59,7 +59,7 @@ class _PresentationViewState extends ConsumerState<PresentationView> {
 
   @override
   Widget build(BuildContext context) {
-    final presentations = Presentation.getPresentations();
+    final presentations = getPresentations;
     if (_isLoading) {
       // Mostrar una pantalla de carga mientras se realiza la verificación
       return Scaffold(
@@ -124,10 +124,9 @@ class _PresentationViewState extends ConsumerState<PresentationView> {
                       CustomElevatedButton(
                         onPressed: () => _onItemTapped(index),
                         sizeText: 15,
-                        text:
-                            index == Presentation.getPresentations().length - 1
-                                ? 'Comenzar'
-                                : 'Siguiente',
+                        text: index == getPresentations.length - 1
+                            ? 'Comenzar'
+                            : 'Siguiente',
                         sizeWidth: 30,
                         sizeHeight: 50,
                         color: Theme.of(context).colorScheme.surface,

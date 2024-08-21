@@ -16,32 +16,52 @@ class DescriptionCanvasView extends ConsumerWidget {
       appBar: AppBar(
         centerTitle: true,
         title: CustomLabel(
-          text: descriptionData.namePilar ?? 'Descripción',
+          text: descriptionData.name ?? 'Descripción',
           fontWeight: FontWeight.w500,
         ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            CustomLabel(
-              text: descriptionData.description ?? 'No description provided.',
-            ),
-            const SizedBox(height: 16),
-            CustomLabel(
-              text: descriptionData.tips ?? 'No tips provided.',
-            ),
-            spacingGap(40),
-            Container(
-              width: double.infinity,
-              height: 300,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage('${descriptionData.imagePilar}')),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const CustomLabel(
+                text: 'Descripción',
+                fontSize: 25,
               ),
-            ),
-          ],
+              spacingGap(15),
+              CustomLabel(
+                text: descriptionData.description ?? 'No description provided.',
+              ),
+              spacingGap(40),
+              const CustomLabel(
+                text: 'Ejemplo',
+                fontSize: 25,
+              ),
+              spacingGap(40),
+              Container(
+                width: double.infinity,
+                height: 300,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage(
+                      '${descriptionData.imagePilar}',
+                    ),
+                  ),
+                ),
+              ),
+              spacingGap(20),
+              const CustomLabel(
+                text: 'Tips',
+                fontSize: 25,
+              ),
+              spacingGap(15),
+              CustomLabel(
+                text: descriptionData.tips ?? 'No tips provided.',
+              ),
+            ],
+          ),
         ),
       ),
     );

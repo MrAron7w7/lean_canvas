@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lean_canvas_project/features/views/views.dart';
+import 'package:lean_canvas_project/shared/components/components.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class PdfPreviewView extends StatelessWidget {
@@ -58,15 +59,9 @@ class PdfPreviewView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'PDF',
-          style: TextStyle(
-              fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
-        ),
-        backgroundColor: const Color(0xFF1B264F),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
+        title: const CustomLabel(
+          text: 'PDF',
+          fontWeight: FontWeight.w700,
         ),
       ),
       body: SizedBox(
@@ -80,12 +75,12 @@ class PdfPreviewView extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(40),
         ),
-        backgroundColor: const Color(0xFF1B264F),
+        backgroundColor: Theme.of(context).colorScheme.primary,
         onPressed: () => _saveToDownloads(context),
-        child: const Icon(
-          Icons.save_alt,
-          color: Colors.white,
-          size: 30,
+        child: const CustomIcon(
+          iconType: Icons.save_alt,
+          colorIcon: Colors.white,
+          sizeIcon: 30,
         ),
       ),
     );
