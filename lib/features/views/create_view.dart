@@ -106,10 +106,13 @@ class _CreateViewState extends ConsumerState<CreateView> {
             spacingGap(30),
 
             //
-            Image.asset(
-              AppAssets.modeloLeanCanvas,
-              height: 250,
-            ),
+            ClipRRect(
+                borderRadius: BorderRadius.circular(30),
+                child: Image.asset(
+                  'assets/images/modelocanvas.png',
+                  height: 250,
+                ),
+              ),
             //
 
             spacingGap(20),
